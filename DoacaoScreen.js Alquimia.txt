@@ -1,0 +1,142 @@
+DoacaoScreen.js Alquimia
+
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+export default function DoacaoScreen({ navigation }) {
+  const [eventName, setEventName] = useState('');
+  const [eventDescription, setDoacaoDescription] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [isSettingStartTime, setIsSettingStartTime] = useState(true); // Define se está configurando o horário de início ou fim
+
+  const handleDayPress = (day) => {
+    setSelectedDate(day.dateString);
+  };
+
+  const handleTimePress = (isStartTime) => {
+    setShowTimePicker(true);
+    setIsSettingStartTime(isStartTime);
+  };
+
+  const handleTimeChange = (event, selectedDate) => {
+    setShowTimePicker(false);
+
+    if (selectedDate !== undefined) {
+      const hours = selectedDate.getHours().toString().padStart(2, '0');
+      const minutes = selectedDate.getMinutes().toString().padStart(2, '0');
+      const selectedTimeFormatted = `${hours}:${minutes}`;
+
+      if (isSettingStartTime) {
+        setStartTime(selectedTimeFormatted);
+      } else {
+        setEndTime(selectedTimeFormatted);
+      }
+    }
+  };
+
+  const handleAddEvent = () => {
+    if (eventName && eventDescription && selectedDate && startTime && endTime) {
+      Alert.alert('Doação Adicionada', 'Sua Doação Está em análise!', [
+        { text: 'OK', onPress: () => navigation.navigate('DoacaoScreen') },
+      ]);
+    } else {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos antes de prosseguir.');
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.container}>
+        <Text style={styles.heading}>Agendar Doação</Text>
+        <TextInput
+          placeholder="Nome do doador"
+          onChangeText={(text) => setEventName(text)}
+          value={eventName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Descrição do que está doando"
+          onChangeText={(text) => setDoacaoDescription(text)}
+          value={eventDescription}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => handleTimePress(true)}>
+          <Text style={styles.buttonText}>Selecionar Horário de Início</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleTimePress(false)}>
+          <Text style={styles.buttonText}>Selecionar Horário de Término</Text>
+        </TouchableOpacity>
+        {showTimePicker && (
+          <DateTimePicker
+            value={new Date()} // Valor inicial do seletor de hora (pode ser alterado conforme necessário)
+            mode="time" // Modo de exibição do seletor (pode ser 'date', 'time', ou 'datetime')
+            is24Hour={true} // Formato de 24 horas
+            display="default" // Exibição padrão do seletor
+            onChange={handleTimeChange} // Função chamada quando o valor é alterado
+          />
+        )}
+        <Calendar
+          onDayPress={handleDayPress}
+          markedDates={{
+            [selectedDate]: { selected: true, marked: true, selectedColor: '#FF0000' },
+          }}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleAddEvent}
+        >
+          <Text style={styles.buttonText}>Adicionar Doação</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.buttonText}>Voltar para home</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0000FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#fff',
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+  },
+  button: {
+    backgroundColor: '#FF0000',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

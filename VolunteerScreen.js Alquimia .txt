@@ -1,0 +1,183 @@
+VolunteerScreen.js Alquimia 
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+export default function VolunteerScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [age, setAge] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [selectedDates, setSelectedDates] = useState({});
+  const [arrivalTime, setArrivalTime] = useState('');
+  const [departureTime, setDepartureTime] = useState('');
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [isSettingArrivalTime, setIsSettingArrivalTime] = useState(true);
+
+  const handleDayPress = (day) => {
+    const selectedDate = day.dateString;
+    const updatedDates = { ...selectedDates };
+
+    if (updatedDates[selectedDate]) {
+      delete updatedDates[selectedDate];
+    } else {
+      updatedDates[selectedDate] = { selected: true, marked: true, selectedColor: '#FF0000' };
+    }
+
+    setSelectedDates(updatedDates);
+  };
+
+  const handleTimePress = (isArrivalTime) => {
+    setShowTimePicker(true);
+    setIsSettingArrivalTime(isArrivalTime);
+  };
+
+  const handleTimeChange = (event, selectedDate) => {
+    setShowTimePicker(false);
+
+    if (selectedDate !== undefined) {
+      const hours = selectedDate.getHours().toString().padStart(2, '0');
+      const minutes = selectedDate.getMinutes().toString().padStart(2, '0');
+      const selectedTimeFormatted = `${hours}:${minutes}`;
+
+      if (isSettingArrivalTime) {
+        setArrivalTime(selectedTimeFormatted);
+      } else {
+        setDepartureTime(selectedTimeFormatted);
+      }
+
+      if (Object.keys(selectedDates).length > 0 && arrivalTime !== '' && departureTime !== '') {
+        setConfirmVisible(true);
+      } else {
+        setConfirmVisible(false);
+      }
+    }
+  };
+
+  const handleVolunteer = () => {
+    if (email && phone && age && fullName && cpf && Object.keys(selectedDates).length > 0 && arrivalTime && departureTime) {
+      Alert.alert('Cadastro realizado', 'Obrigado por se voluntariar!', [
+        { text: 'OK', onPress: () => navigation.reset({ routes: [{ name: 'Login' }] }) },
+      ]);
+    } else {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos antes de prosseguir.');
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.container}>
+        <Text style={styles.heading}>Cadastro de Voluntários</Text>
+        <TextInput
+          placeholder="Email"
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Telefone"
+          onChangeText={(text) => setPhone(text)}
+          value={phone}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Idade"
+          onChangeText={(text) => setAge(text)}
+          value={age}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Nome Completo"
+          onChangeText={(text) => setFullName(text)}
+          value={fullName}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="CPF"
+          onChangeText={(text) => setCpf(text)}
+          value={cpf}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.button} onPress={() => setCalendarVisible(true)}>
+          <Text style={styles.buttonText}>Selecionar Data</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleTimePress(true)}>
+          <Text style={styles.buttonText}>Selecionar Horário de Chegada</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleTimePress(false)}>
+          <Text style={styles.buttonText}>Selecionar Horário de Saída</Text>
+        </TouchableOpacity>
+        {showTimePicker && (
+          <DateTimePicker
+            value={new Date()} 
+            mode="time" 
+            is24Hour={true} 
+            display="default" 
+            onChange={handleTimeChange} 
+          />
+        )}
+        {calendarVisible && (
+          <Calendar
+            onDayPress={handleDayPress}
+            markedDates={selectedDates}
+          />
+        )}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: confirmVisible ? '#FF0000' : '#ccc' }]}
+          onPress={handleVolunteer}
+          disabled={!confirmVisible}
+        >
+          <Text style={styles.buttonText}>Cadastrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text style={styles.buttonText}>Voltar para home</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0000FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#fff',
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+  },
+  button: {
+    backgroundColor: '#FF0000',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

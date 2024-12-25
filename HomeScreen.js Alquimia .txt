@@ -1,0 +1,76 @@
+HomeScreen.js Alquimia 
+
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+
+export default function HomeScreen({ navigation }) {
+  return (
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={styles.container}>
+        <Text style={styles.heading}>Bem-vindo à Nossa ONG</Text>
+        <Text style={styles.story}>
+          Nossa ONG foi fundada com o objetivo de ajudar a comunidade. Ao longo dos anos, temos
+          trabalhado incansavelmente para proporcionar melhores condições de vida para aqueles que
+          mais precisam. Acreditamos na força da solidariedade e no poder da transformação social.
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignupScreen')}>
+          <Text style={styles.buttonText}>Cadastro</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('VolunteerScreen')}>
+          <Text style={styles.buttonText}>Voluntários</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EventSchedulerScreen')}>
+          <Text style={styles.buttonText}>Agendar Evento</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DoacaoScreen')}>
+          <Text style={styles.buttonText}>Agendar Doação</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#0000FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 20,
+  },
+  story: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 40,
+    textAlign: 'center',
+  },
+  button: {
+    backgroundColor: '#FF0000',
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    marginBottom: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

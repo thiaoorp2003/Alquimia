@@ -1,0 +1,107 @@
+App.js Alquimia 
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Login from './screens/Login';
+import SignupScreen from './screens/SignupScreen'; 
+import VolunteerScreen from './screens/VolunteerScreen';
+import EventSchedulerScreen from './screens/EventSchedulerScreen'; 
+import HomeScreen from './screens/HomeScreen'; // Importe a nova página
+import Doacao from './screens/DoacaoScreen';
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: 'Home',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            title: 'Login',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="SignupScreen"
+          component={SignupScreen}
+          options={{
+            title: 'Cadastro',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="VolunteerScreen"
+          component={VolunteerScreen}
+          options={{
+            title: 'Voluntário',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="EventSchedulerScreen"
+          component={EventSchedulerScreen}
+          options={{
+            title: 'Agendar Evento',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+         <Stack.Screen
+          name="DoacaoScreen"
+          component={Doacao}
+          options={{
+            title: 'Agendar Doação',
+            headerStyle: {
+              backgroundColor: '#0000FF',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
